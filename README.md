@@ -1,16 +1,33 @@
-# React + Vite
+# EO Data Finder
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+EO Data Finder is a web application for searching and visualizing Earth Observation data, especially Sentinel-2 products.
 
-Currently, two official plugins are available:
+## Sprint 1 — Product and Foundation
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The current prototype allows the user to:
 
-## React Compiler
+- Select a geographic area.
+- Define a start date and an end date.
+- Set a maximum cloud coverage.
+- Validate incorrect or incomplete input.
+- Display demonstration Sentinel-2 product metadata.
+- Preview a simulated drought-risk analysis workflow.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+> The Sprint 1 prototype uses demonstration data. Real Copernicus catalogue access, satellite image processing, NDVI calculation, CHIRPS rainfall data, and drought-risk estimation will be implemented progressively in later sprints.
 
-## Expanding the Oxlint configuration
+## Technologies
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+- React
+- Vite
+- JavaScript
+- CSS
+- Node.js
+- pnpm
+- Git
+
+## Run the project locally
+
+Install the dependencies:
+
+```bash
+pnpm install
