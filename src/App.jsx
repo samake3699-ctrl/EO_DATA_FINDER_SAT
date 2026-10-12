@@ -36,45 +36,6 @@ const DEMO_PRODUCTS = [
   },
 ];
 
-const VEGETATION_CELLS = [
-  "low",
-  "low",
-  "moderate",
-  "moderate",
-  "healthy",
-  "healthy",
-  "low",
-  "moderate",
-  "healthy",
-  "healthy",
-  "moderate",
-  "low",
-  "moderate",
-  "healthy",
-  "healthy",
-  "moderate",
-  "low",
-  "low",
-  "healthy",
-  "healthy",
-  "moderate",
-  "moderate",
-  "low",
-  "low",
-  "healthy",
-  "moderate",
-  "moderate",
-  "low",
-  "low",
-  "moderate",
-  "moderate",
-  "healthy",
-  "healthy",
-  "moderate",
-  "low",
-  "low",
-];
-
 const INITIAL_FORM = {
   area: "sikasso",
   startDate: "2025-07-01",
@@ -154,7 +115,9 @@ function App() {
 
   function handleOpenAnalysis() {
     if (!selectedProductId) {
-      setError("Please select a satellite product before opening the analysis.");
+      setError(
+        "Please select a satellite product before opening the analysis."
+      );
       return;
     }
 
@@ -164,35 +127,47 @@ function App() {
 
   return (
     <main className="app-shell">
-      <header className="app-header">
-        <div>
-          <p className="eyebrow">Earth observation application</p>
+      <header className="app-header s2-header">
+        <div className="header-main">
+          <p className="eyebrow">Earth Observation Workspace</p>
+
           <h1>EO Data Finder</h1>
+
           <p className="header-description">
-            Find Sentinel-2 data and prepare an experimental drought-risk
-            analysis for a selected pilot area.
+            Search and review Sentinel-2 products for environmental monitoring
+            and prepare interpretable vegetation and drought-risk analysis.
           </p>
+
+          <div className="header-tags">
+            <span>Sentinel-2</span>
+            <span>Vegetation monitoring</span>
+            <span>Environmental analytics</span>
+          </div>
         </div>
 
-        <div className="header-badge">
-          Semester MVP
-        </div>
+        <div className="header-badge">S2 · MVP workspace</div>
       </header>
 
-      <div className="prototype-notice">
-        <strong>S1 prototype:</strong> the satellite products and drought
-        indicators displayed on this page are demonstration data. No real
-        satellite image processing is performed during S1.
+      <div className="prototype-notice s2-notice">
+        <strong>S2 interface preview:</strong>
+        <span>
+          satellite products are still demonstration data while the Python
+          backend, database and catalogue integration are being prepared.
+        </span>
       </div>
 
       <section className="search-card">
         <div className="section-heading">
           <div>
-            <p className="step-label">Step 1</p>
-            <h2>Search criteria</h2>
+            <p className="step-label">01 · Search</p>
+            <h2>Satellite data search</h2>
+            <p className="section-description">
+              Define the geographic area, acquisition period and maximum cloud
+              coverage.
+            </p>
           </div>
 
-          <span className="status-label">Local prototype</span>
+          <span className="status-label">Frontend ready</span>
         </div>
 
         <form onSubmit={handleSearch}>
@@ -270,15 +245,17 @@ function App() {
               </select>
 
               <small>
-                Flood mapping and crop-yield prediction are outside the
-                semester MVP.
+                Semester scope: one environmental use case and one limited pilot
+                workflow.
               </small>
             </div>
           </div>
 
-          <button className="primary-button" type="submit">
-            Search satellite products
-          </button>
+          <div className="form-actions">
+            <button className="primary-button" type="submit">
+              Search satellite products
+            </button>
+          </div>
         </form>
 
         {error && (
@@ -292,26 +269,42 @@ function App() {
         <section className="results-card">
           <div className="section-heading">
             <div>
-              <p className="step-label">Step 2</p>
-              <h2>Satellite products</h2>
+              <p className="step-label">02 · Products</p>
+              <h2>Available satellite products</h2>
+              <p className="section-description">
+                Review the matching Sentinel-2 products and select one for the
+                analysis workspace.
+              </p>
             </div>
 
-            <span className="status-label demo-label">Demo data</span>
+            <span className="result-count">
+              {products.length} {products.length === 1 ? "product" : "products"}
+            </span>
           </div>
 
-          <p className="search-summary">
-            Area: <strong>{selectedAreaLabel}</strong> · Period:{" "}
-            <strong>
-              {form.startDate} to {form.endDate}
-            </strong>{" "}
-            · Maximum cloud coverage:{" "}
-            <strong>{form.maxCloud}%</strong>
-          </p>
+          <div className="search-summary-chips">
+            <span>
+              Area <strong>{selectedAreaLabel}</strong>
+            </span>
+
+            <span>
+              Period{" "}
+              <strong>
+                {form.startDate} → {form.endDate}
+              </strong>
+            </span>
+
+            <span>
+              Cloud ≤ <strong>{form.maxCloud}%</strong>
+            </span>
+
+            <span className="demo-chip">Demo catalogue</span>
+          </div>
 
           {products.length === 0 ? (
             <p className="empty-message">
-              No demonstration product matches this cloud coverage limit.
-              Try a value of 10%.
+              No demonstration product matches this cloud coverage limit. Try a
+              value of 10%.
             </p>
           ) : (
             <>
@@ -340,6 +333,7 @@ function App() {
                       >
                         <td>
                           <input
+                            className="product-radio"
                             type="radio"
                             name="selectedProduct"
                             aria-label={`Select ${product.name}`}
@@ -351,9 +345,13 @@ function App() {
                         </td>
 
                         <td className="product-name">{product.name}</td>
+
                         <td>{product.acquisitionDate}</td>
+
                         <td>{product.productType}</td>
+
                         <td>{product.cloudCover}%</td>
+
                         <td>
                           <span className="available-label">
                             {product.availability}
@@ -365,14 +363,22 @@ function App() {
                 </table>
               </div>
 
-              <button
-                className="secondary-button"
-                type="button"
-                onClick={handleOpenAnalysis}
-                disabled={!selectedProductId}
-              >
-                Open drought analysis preview
-              </button>
+              <div className="results-actions">
+                <div className="selection-help">
+                  {selectedProduct
+                    ? `Selected: ${selectedProduct.name}`
+                    : "Select one product to continue."}
+                </div>
+
+                <button
+                  className="secondary-button"
+                  type="button"
+                  onClick={handleOpenAnalysis}
+                  disabled={!selectedProductId}
+                >
+                  Open analysis workspace
+                </button>
+              </div>
             </>
           )}
         </section>
@@ -382,24 +388,31 @@ function App() {
         <section className="analysis-card">
           <div className="section-heading">
             <div>
-              <p className="step-label">Step 3</p>
-              <h2>Experimental drought-risk preview</h2>
+              <p className="step-label">03 · Analysis</p>
+              <h2>Vegetation & drought analysis</h2>
+
+              <p className="section-description">
+                Visual preview of the analysis workspace planned for the Python
+                processing pipeline.
+              </p>
             </div>
 
             <span className="status-label warning-label">
-              Requires validation
+              Experimental
             </span>
           </div>
 
-          <p className="analysis-description">
-            This S1 screen previews the result expected from the future Python
-            processing module. The values below are simulated and must not be
-            interpreted as a real environmental assessment.
-          </p>
+          <div className="analysis-product-bar">
+            <div>
+              <span>Selected Sentinel-2 product</span>
+              <strong>{selectedProduct.name}</strong>
+            </div>
 
-          <div className="selected-product">
-            <span>Selected product</span>
-            <strong>{selectedProduct.name}</strong>
+            <div className="analysis-product-meta">
+              <span>{selectedProduct.acquisitionDate}</span>
+              <span>{selectedProduct.cloudCover}% cloud</span>
+              <span>{selectedAreaLabel}</span>
+            </div>
           </div>
 
           <div className="analysis-layout">
@@ -413,16 +426,15 @@ function App() {
                 <span className="demo-label-inline">Simulated</span>
               </div>
 
-              <div
-                className="vegetation-grid"
-                aria-label="Simulated vegetation condition map"
-              >
-                {VEGETATION_CELLS.map((condition, index) => (
-                  <span
-                    key={`${condition}-${index}`}
-                    className={`vegetation-cell ${condition}`}
-                  />
-                ))}
+              <div className="simulated-map">
+                <div className="map-location">
+                  <span>Pilot area</span>
+                  <strong>{selectedAreaLabel}</strong>
+                </div>
+
+                <div className="map-status">
+                  SIMULATED NDVI SURFACE
+                </div>
               </div>
 
               <div className="legend">
@@ -453,74 +465,103 @@ function App() {
 
                 <article className="metric-card">
                   <span>Rainfall anomaly</span>
-                  <strong className="orange-value">-18%</strong>
+                  <strong className="orange-value">−18%</strong>
                   <small>Demonstration value</small>
                 </article>
 
                 <article className="metric-card">
-                  <span>One-month drought risk</span>
+                  <span>Drought risk</span>
                   <strong className="risk-value">Moderate</strong>
                   <small>Experimental estimate</small>
                 </article>
               </div>
 
               <article className="indicator-panel">
-                <h3>Observed indicators</h3>
+                <div className="indicator-heading">
+                  <div>
+                    <p className="step-label">Indicators</p>
+                    <h3>Observed conditions</h3>
+                  </div>
+
+                  <span className="demo-label-inline">
+                    Demo values
+                  </span>
+                </div>
 
                 <div className="indicator-row">
                   <span>Vegetation condition</span>
+
                   <div className="progress-track">
                     <div className="progress-fill vegetation-progress" />
                   </div>
+
                   <strong>42%</strong>
                 </div>
 
                 <div className="indicator-row">
                   <span>Rainfall level</span>
+
                   <div className="progress-track">
                     <div className="progress-fill rainfall-progress" />
                   </div>
+
                   <strong>32%</strong>
                 </div>
 
                 <div className="indicator-row">
                   <span>Model confidence</span>
+
                   <div className="progress-track">
                     <div className="progress-fill confidence-progress" />
                   </div>
+
                   <strong>N/A</strong>
                 </div>
 
                 <p className="validation-note">
-                  A real confidence score will only be shown after the Python
-                  model has been trained, tested, and validated with historical
-                  data.
+                  A real confidence score will only be displayed after the
+                  Python model has been trained, tested and validated using
+                  historical data.
                 </p>
               </article>
             </div>
           </div>
 
+          <div className="data-sources-heading">
+            <p className="step-label">Processing pipeline</p>
+            <h3>Planned data sources</h3>
+          </div>
+
           <div className="data-sources">
             <div>
-              <span>Planned satellite source</span>
+              <span>Satellite source</span>
               <strong>Sentinel-2 Level-2A</strong>
+              <small>Copernicus Data Space</small>
             </div>
 
             <div>
-              <span>Planned rainfall source</span>
-              <strong>CHIRPS historical rainfall</strong>
+              <span>Rainfall source</span>
+              <strong>CHIRPS</strong>
+              <small>Historical precipitation data</small>
             </div>
 
             <div>
-              <span>Planned processing</span>
-              <strong>Python, NDVI and interpretable model</strong>
+              <span>Processing</span>
+              <strong>Python · NDVI · analytics</strong>
+              <small>Experimental interpretation</small>
             </div>
           </div>
+
+          <p className="analysis-disclaimer">
+            This interface currently contains simulated analysis values. It
+            must not be interpreted as an operational drought warning or a
+            scientifically validated environmental assessment.
+          </p>
         </section>
       )}
 
       <footer className="app-footer">
-        EO Data Finder · S1 local interface prototype
+        EO Data Finder · S2 preparation · Earth Observation MVP
       </footer>
     </main>
   );
