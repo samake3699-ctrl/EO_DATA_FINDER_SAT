@@ -9,32 +9,6 @@ const PILOT_AREAS = [
   { value: "gao", label: "Gao" },
 ];
 
-const DEMO_PRODUCTS = [
-  {
-    id: "demo-001",
-    name: "S2A_MSIL2A_20250731_DEMO_001",
-    acquisitionDate: "2025-07-31",
-    productType: "Sentinel-2 Level-2A",
-    cloudCover: 2.85,
-    availability: "Available",
-  },
-  {
-    id: "demo-002",
-    name: "S2B_MSIL2A_20250726_DEMO_002",
-    acquisitionDate: "2025-07-26",
-    productType: "Sentinel-2 Level-2A",
-    cloudCover: 6.1,
-    availability: "Available",
-  },
-  {
-    id: "demo-003",
-    name: "S2A_MSIL2A_20250721_DEMO_003",
-    acquisitionDate: "2025-07-21",
-    productType: "Sentinel-2 Level-2A",
-    cloudCover: 9.4,
-    availability: "Available",
-  },
-];
 
 const INITIAL_FORM = {
   area: "sikasso",
@@ -70,43 +44,61 @@ function App() {
     }));
   }
 
-  function handleSearch(event) {
-    event.preventDefault();
+async function handleSearch(event) {
+  event.preventDefault();
 
-    setError("");
-    setProducts([]);
-    setSearchCompleted(false);
-    setSelectedProductId("");
-    setShowAnalysis(false);
+  setError("");
+  setProducts([]);
+  setSearchCompleted(false);
+  setSelectedProductId("");
+  setShowAnalysis(false);
 
-    if (!form.area || !form.startDate || !form.endDate || !form.maxCloud) {
-      setError("Please complete all search fields.");
-      return;
+  if (!form.area || !form.startDate || !form.endDate || !form.maxCloud) {
+    setError("Please complete all search fields.");
+    return;
+  }
+
+  if (form.startDate >= form.endDate) {
+    setError("The end date must be after the start date.");
+    return;
+  }
+
+  const cloudLimit = Number(form.maxCloud);
+
+  if (
+    Number.isNaN(cloudLimit) ||
+    cloudLimit < 0 ||
+    cloudLimit > 100
+  ) {
+    setError("Cloud coverage must be between 0 and 100.");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:8000/api/products"
+    );
+
+    if (!response.ok) {
+      throw new Error("API request failed");
     }
 
-    if (form.startDate >= form.endDate) {
-      setError("The end date must be after the start date.");
-      return;
-    }
+    const apiProducts = await response.json();
 
-    const cloudLimit = Number(form.maxCloud);
-
-    if (
-      Number.isNaN(cloudLimit) ||
-      cloudLimit < 0 ||
-      cloudLimit > 100
-    ) {
-      setError("Cloud coverage must be between 0 and 100.");
-      return;
-    }
-
-    const filteredProducts = DEMO_PRODUCTS.filter(
+    const filteredProducts = apiProducts.filter(
       (product) => product.cloudCover <= cloudLimit
     );
 
     setProducts(filteredProducts);
     setSearchCompleted(true);
+  } catch (error) {
+    console.error(error);
+
+    setError(
+      "Unable to connect to the EO Data Finder backend."
+    );
   }
+}
 
   function handleSelectProduct(productId) {
     setSelectedProductId(productId);
