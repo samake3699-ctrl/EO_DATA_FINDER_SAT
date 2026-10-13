@@ -1,6 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from fastapi import Depends
+from sqlalchemy.orm import Session
+
+import models
+
+from database import Base, SessionLocal, engine
+
 app = FastAPI(
     title="EO Data Finder API",
     version="0.1.0",
@@ -19,32 +26,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-DEMO_PRODUCTS = [
-    {
-        "id": "demo-001",
-        "name": "S2A_MSIL2A_20250731_DEMO_001",
-        "acquisitionDate": "2025-07-31",
-        "productType": "Sentinel-2 Level-2A",
-        "cloudCover": 2.85,
-        "availability": "Available",
-    },
-    {
-        "id": "demo-002",
-        "name": "S2B_MSIL2A_20250726_DEMO_002",
-        "acquisitionDate": "2025-07-26",
-        "productType": "Sentinel-2 Level-2A",
-        "cloudCover": 6.1,
-        "availability": "Available",
-    },
-    {
-        "id": "demo-003",
-        "name": "S2A_MSIL2A_20250721_DEMO_003",
-        "acquisitionDate": "2025-07-21",
-        "productType": "Sentinel-2 Level-2A",
-        "cloudCover": 9.4,
-        "availability": "Available",
-    },
-]
+Base.metadata.create_all(bind=engine)
+
+def get_db():
+    db = SessionLocal()
+
+    try:
+        yield db
+    finally:
+        db.close()
+
 
 
 @app.get("/")
@@ -55,5 +46,17 @@ def read_root():
 
 
 @app.get("/api/products")
-def get_products():
-    return DEMO_PRODUCTS
+def get_products(db: Session = Depends(get_db)):
+    products = db.query(models.Product).all()
+
+    return [
+        {
+            "id": product.product_id,
+            "name": product.name,
+            "acquisitionDate": product.acquisition_date,
+            "productType": product.product_type,
+            "cloudCover": product.cloud_cover,
+            "availability": product.availability,
+        }
+        for product in products
+    ]
