@@ -76,7 +76,7 @@ async function handleSearch(event) {
 
   try {
     const response = await fetch(
-      "http://127.0.0.1:8000/api/products"
+      `http://127.0.0.1:8000/api/products?max_cloud=${cloudLimit}`
     );
 
     if (!response.ok) {
@@ -85,11 +85,7 @@ async function handleSearch(event) {
 
     const apiProducts = await response.json();
 
-    const filteredProducts = apiProducts.filter(
-      (product) => product.cloudCover <= cloudLimit
-    );
-
-    setProducts(filteredProducts);
+    setProducts(apiProducts);
     setSearchCompleted(true);
   } catch (error) {
     console.error(error);

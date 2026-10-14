@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 
-from fastapi import Depends
+
 from sqlalchemy.orm import Session
 
 import models
@@ -46,9 +46,20 @@ def read_root():
 
 
 @app.get("/api/products")
-def get_products(db: Session = Depends(get_db)):
-    products = db.query(models.Product).all()
-
+def get_products(
+    max_cloud: float = Query(
+        default=100,
+        ge=0,
+        le=100,
+        description="Maximum cloud coverage percentage",
+    ),
+    db: Session = Depends(get_db),
+):
+    products = (
+        db.query(models.Product)
+        .filter(models.Product.cloud_cover <= max_cloud)
+        .all()
+    )
     return [
         {
             "id": product.product_id,
