@@ -403,14 +403,21 @@ select:focus {
   line-height: 1.6;
 }
 
+
 .empty-message {
-  padding: 18px;
+  padding: 22px 24px;
 
-  color: #6c531c;
-  background: #fff7d9;
+  color: #365b4d;
+  background: #f3f8f5;
 
-  border-radius: 10px;
+  border: 1px solid #d8e8df;
+  border-left: 4px solid #6aab89;
+  border-radius: 12px;
+
+  font-size: 0.95rem;
+  line-height: 1.7;
 }
+
 
 /* TABLE */
 
@@ -913,9 +920,37 @@ tbody tr:last-child td {
   font-weight: 700;
 }
 
+
 .s2-notice {
-  border-left: 4px solid #d9b64c;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+
+  padding: 16px 20px;
+  margin-top: 18px;
+
+  background: #edf7f2;
+  color: #245445;
+
+  border: 1px solid #cce5d7;
+  border-left: 4px solid #21845d;
+  border-radius: 12px;
+
+  line-height: 1.6;
 }
+
+.s2-notice strong {
+  color: #176b49;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.s2-notice span {
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
 
 .section-description {
   max-width: 720px;

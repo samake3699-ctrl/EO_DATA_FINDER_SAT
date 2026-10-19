@@ -1,12 +1,7 @@
 import { useMemo, useState } from "react";
 
 const PILOT_AREAS = [
-  { value: "mali", label: "Mali" },
-  { value: "bamako", label: "Bamako" },
-  { value: "kayes", label: "Kayes" },
-  { value: "sikasso", label: "Sikasso" },
-  { value: "mopti", label: "Mopti" },
-  { value: "gao", label: "Gao" },
+  { value: "sikasso", label: "Sikasso, Mali" },
 ];
 
 
@@ -75,8 +70,15 @@ async function handleSearch(event) {
   }
 
   try {
+    const params = new URLSearchParams({
+      area: form.area,
+      max_cloud: String(cloudLimit),
+      start_date: form.startDate,
+      end_date: form.endDate,
+    });
+
     const response = await fetch(
-      `http://127.0.0.1:8000/api/products?max_cloud=${cloudLimit}`
+      `http://127.0.0.1:8000/api/products?${params.toString()}`
     );
 
     if (!response.ok) {
@@ -137,11 +139,14 @@ async function handleSearch(event) {
       </header>
 
       <div className="prototype-notice s2-notice">
-        <strong>S2 interface preview:</strong>
-        <span>
-          satellite products are still demonstration data while the Python
-          backend, database and catalogue integration are being prepared.
-        </span>
+        <strong>Sprint 2 — Functional MVP:</strong>
+          <span>
+            React is connected to FastAPI and SQLite. Satellite product searches
+            support acquisition dates and cloud coverage, with Sikasso as the
+            pilot area. Product metadata and drought analysis remain
+            demonstrations; live satellite catalogue integration is planned
+            for a future sprint.
+          </span>
       </div>
 
       <section className="search-card">
@@ -155,7 +160,7 @@ async function handleSearch(event) {
             </p>
           </div>
 
-          <span className="status-label">Frontend ready</span>
+          <span className="status-label">Integrated MVP</span>
         </div>
 
         <form onSubmit={handleSearch}>
@@ -291,9 +296,11 @@ async function handleSearch(event) {
 
           {products.length === 0 ? (
             <p className="empty-message">
-              No demonstration product matches this cloud coverage limit. Try a
-              value of 10%.
+              No demonstration products match the selected search criteria.
+              Try adjusting the acquisition dates or increasing the maximum
+              cloud coverage.
             </p>
+
           ) : (
             <>
               <div className="table-wrapper">
@@ -549,7 +556,7 @@ async function handleSearch(event) {
       )}
 
       <footer className="app-footer">
-        EO Data Finder · S2 preparation · Earth Observation MVP
+        EO Data Finder · Sprint 2 MVP · Earth Observation MVP
       </footer>
     </main>
   );

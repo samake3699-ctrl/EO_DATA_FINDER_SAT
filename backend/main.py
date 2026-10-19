@@ -1,6 +1,7 @@
-from fastapi import Depends, FastAPI, Query
+from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-
+from datetime import date
+from typing import Literal
 
 from sqlalchemy.orm import Session
 
@@ -47,19 +48,57 @@ def read_root():
 
 @app.get("/api/products")
 def get_products(
+    area: Literal["sikasso"] = Query(
+        default="sikasso",
+        description="Supported pilot area: Sikasso, Mali",
+    ),
     max_cloud: float = Query(
         default=100,
         ge=0,
         le=100,
         description="Maximum cloud coverage percentage",
     ),
+    start_date: date | None = Query(
+        default=None,
+        description="Start date in YYYY-MM-DD format",
+    ),
+    end_date: date | None = Query(
+        default=None,
+        description="End date in YYYY-MM-DD format",
+    ),
     db: Session = Depends(get_db),
 ):
-    products = (
-        db.query(models.Product)
-        .filter(models.Product.cloud_cover <= max_cloud)
-        .all()
+    # Validate the date range
+    if start_date and end_date and start_date >= end_date:
+        raise HTTPException(
+            status_code=422,
+            detail="The end date must be after the start date.",
+        )
+
+    # Start building the database query
+    query = db.query(models.Product)
+
+    # Filter by cloud coverage
+    query = query.filter(
+        models.Product.cloud_cover <= max_cloud
     )
+
+    # Filter by start date
+    if start_date:
+        query = query.filter(
+            models.Product.acquisition_date >= start_date.isoformat()
+        )
+
+    # Filter by end date
+    if end_date:
+        query = query.filter(
+            models.Product.acquisition_date <= end_date.isoformat()
+        )
+
+    # Execute database query
+    products = query.all()
+
+    # Return results to React
     return [
         {
             "id": product.product_id,
