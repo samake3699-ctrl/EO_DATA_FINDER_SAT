@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Navigate, useLocation, useNavigate } from "react-router";
 
 const PILOT_AREAS = [
   { value: "sikasso", label: "Sikasso, Mali" },
@@ -19,7 +20,10 @@ function App() {
   const [products, setProducts] = useState([]);
   const [searchCompleted, setSearchCompleted] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState("");
-  const [showAnalysis, setShowAnalysis] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isAnalysisPage = location.pathname === "/analysis";
 
   const selectedProduct = useMemo(
     () =>
@@ -46,7 +50,6 @@ async function handleSearch(event) {
   setProducts([]);
   setSearchCompleted(false);
   setSelectedProductId("");
-  setShowAnalysis(false);
 
   if (!form.area || !form.startDate || !form.endDate || !form.maxCloud) {
     setError("Please complete all search fields.");
@@ -112,8 +115,11 @@ async function handleSearch(event) {
     }
 
     setError("");
-    setShowAnalysis(true);
+    navigate("/analysis");
   }
+  if (isAnalysisPage && !selectedProduct) {
+    return <Navigate to="/" replace />;
+}
 
   return (
     <main className="app-shell">
@@ -121,7 +127,71 @@ async function handleSearch(event) {
         <div className="header-main">
           <p className="eyebrow">Earth Observation Workspace</p>
 
+          
+        <div className="s3-brand">
+          
+<span className="s3-brand-icon" aria-hidden="true">
+  <svg
+    viewBox="0 0 80 80"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g
+      transform="rotate(-22 40 40)"
+      stroke="currentColor"
+      strokeWidth="2.4"
+      strokeLinejoin="round"
+      strokeLinecap="round"
+    >
+      {/* Left solar panel */}
+      <rect
+        x="5"
+        y="28"
+        width="20"
+        height="24"
+        rx="2"
+        fill="currentColor"
+        fillOpacity="0.18"
+      />
+      <path d="M11.7 28V52M18.3 28V52M5 36H25M5 44H25" />
+
+      {/* Right solar panel */}
+      <rect
+        x="55"
+        y="28"
+        width="20"
+        height="24"
+        rx="2"
+        fill="currentColor"
+        fillOpacity="0.18"
+      />
+      <path d="M61.7 28V52M68.3 28V52M55 36H75M55 44H75" />
+
+      {/* Connectors */}
+      <path d="M25 40H31M49 40H55" />
+
+      {/* Satellite body */}
+      <rect
+        x="31"
+        y="29"
+        width="18"
+        height="22"
+        rx="3"
+        fill="currentColor"
+        fillOpacity="0.3"
+      />
+      <path d="M36 34H44M36 40H44M36 46H44" />
+
+      {/* Antenna */}
+      <path d="M40 29V17" />
+      <circle cx="40" cy="13" r="3" fill="currentColor" />
+    </g>
+  </svg>
+</span>
+
           <h1>EO Data Finder</h1>
+        </div>
+
 
           <p className="header-description">
             Search and review Sentinel-2 products for environmental monitoring
@@ -135,11 +205,34 @@ async function handleSearch(event) {
           </div>
         </div>
 
-        <div className="header-badge">S2 · MVP workspace</div>
+        <div className="header-badge">S3 · Geospatial Workspace</div>
       </header>
 
+      
+<nav className="s3-navigation" aria-label="Main navigation">
+  <button
+    type="button"
+    className={!isAnalysisPage ? "active" : ""}
+    onClick={() => navigate("/")}
+  >
+    Satellite Catalogue
+  </button>
+
+  <button
+    type="button"
+    className={isAnalysisPage ? "active" : ""}
+    onClick={handleOpenAnalysis}
+    disabled={!selectedProduct}
+  >
+    Analysis Workspace
+  </button>
+</nav>
+
+{!isAnalysisPage && (
+  <>
+
       <div className="prototype-notice s2-notice">
-        <strong>Sprint 2 — Functional MVP:</strong>
+        <strong>Sprint 3 — Geospatial Workspace:</strong>
           <span>
             React is connected to FastAPI and SQLite. Satellite product searches
             support acquisition dates and cloud coverage, with Sikasso as the
@@ -359,11 +452,22 @@ async function handleSearch(event) {
               </div>
 
               <div className="results-actions">
-                <div className="selection-help">
-                  {selectedProduct
-                    ? `Selected: ${selectedProduct.name}`
-                    : "Select one product to continue."}
-                </div>
+                
+<div className="selection-help">
+  {selectedProduct ? (
+    <div className="s3-selected-product">
+      <strong>{selectedProduct.name}</strong>
+      <span>
+        {selectedProduct.acquisitionDate} ·
+        {" "}{selectedProduct.productType} ·
+        {" "}Cloud {selectedProduct.cloudCover}%
+      </span>
+    </div>
+  ) : (
+    "Select one product to continue."
+  )}
+</div>
+
 
                 <button
                   className="secondary-button"
@@ -378,9 +482,17 @@ async function handleSearch(event) {
           )}
         </section>
       )}
-
-      {showAnalysis && selectedProduct && (
+    </>
+  )}
+      {isAnalysisPage && selectedProduct && (
         <section className="analysis-card">
+          <button
+  type="button"
+  className="s3-back-button"
+  onClick={() => navigate("/")}
+>
+  ← Back to Satellite Catalogue
+</button>
           <div className="section-heading">
             <div>
               <p className="step-label">03 · Analysis</p>
@@ -556,7 +668,7 @@ async function handleSearch(event) {
       )}
 
       <footer className="app-footer">
-        EO Data Finder · Sprint 2 MVP · Earth Observation MVP
+        EO Data Finder · Sprint 3 · Geospatial Intelligence Workspace
       </footer>
     </main>
   );
