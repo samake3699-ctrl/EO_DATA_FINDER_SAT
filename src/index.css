@@ -1555,3 +1555,18 @@ tbody tr:last-child td {
   font-size: 12px;
   line-height: 1.6;
 }
+
+/* SPRINT 3 — Product save notification */
+
+.s3-save-message {
+  margin: 14px 0 0;
+  padding: 12px 16px;
+  background-color: #edf8f1;
+  color: #176b49;
+  border: 1px solid #c5e5d2;
+  border-left: 4px solid #21845d;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}

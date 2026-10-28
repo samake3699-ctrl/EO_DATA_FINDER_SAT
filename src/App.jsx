@@ -20,6 +20,7 @@ function App() {
   const [products, setProducts] = useState([]);
   const [searchCompleted, setSearchCompleted] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState("");
+  const [saveMessage, setSaveMessage] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -50,6 +51,7 @@ async function handleSearch(event) {
   setProducts([]);
   setSearchCompleted(false);
   setSelectedProductId("");
+  setSaveMessage("");
 
   if (!form.area || !form.startDate || !form.endDate || !form.maxCloud) {
     setError("Please complete all search fields.");
@@ -81,7 +83,7 @@ async function handleSearch(event) {
     });
 
     const response = await fetch(
-      `http://127.0.0.1:8000/api/products?${params.toString()}`
+      `http://127.0.0.1:8000/api/copernicus/products?${params.toString()}`
     );
 
     if (!response.ok) {
@@ -103,7 +105,7 @@ async function handleSearch(event) {
 
   function handleSelectProduct(productId) {
     setSelectedProductId(productId);
-    setShowAnalysis(false);
+    setSaveMessage("");
   }
 
   function handleOpenAnalysis() {
@@ -117,6 +119,34 @@ async function handleSearch(event) {
     setError("");
     navigate("/analysis");
   }
+  
+
+async function handleSaveProduct() {
+  if (!selectedProductId) return;
+
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:8000/api/copernicus/products/${selectedProductId}/save`,
+      { method: "POST" }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    if (result.status === "saved") {
+      setSaveMessage("Product saved successfully.");
+    } else {
+      setSaveMessage("This product is already saved.");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Unable to save the product.");
+  }
+}
+
   if (isAnalysisPage && !selectedProduct) {
     return <Navigate to="/" replace />;
 }
@@ -384,7 +414,7 @@ async function handleSearch(event) {
               Cloud ≤ <strong>{form.maxCloud}%</strong>
             </span>
 
-            <span className="demo-chip">Demo catalogue</span>
+            <span className="demo-chip">Copernicus data · SQLite</span>
           </div>
 
           {products.length === 0 ? (
@@ -438,7 +468,7 @@ async function handleSearch(event) {
 
                         <td>{product.productType}</td>
 
-                        <td>{product.cloudCover}%</td>
+                        <td>{Number(product.cloudCover).toFixed(2)}%</td>
 
                         <td>
                           <span className="available-label">
@@ -468,6 +498,15 @@ async function handleSearch(event) {
   )}
 </div>
 
+                <button
+                  className="secondary-button"
+                  type="button"
+                  onClick={handleSaveProduct}
+                  disabled={!selectedProductId}
+                >
+                  Save Product
+                </button>
+
 
                 <button
                   className="secondary-button"
@@ -478,6 +517,13 @@ async function handleSearch(event) {
                   Open analysis workspace
                 </button>
               </div>
+              
+{saveMessage && (
+  <p className="s3-save-message" role="status">
+    {saveMessage}
+  </p>
+)}
+
             </>
           )}
         </section>

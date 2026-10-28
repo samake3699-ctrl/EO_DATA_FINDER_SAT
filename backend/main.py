@@ -110,3 +110,75 @@ def get_products(
         }
         for product in products
     ]
+
+
+@app.get("/api/copernicus/products")
+def get_copernicus_products(
+    start_date: date = Query(default=date(2025, 10, 1)),
+    end_date: date = Query(default=date(2025, 10, 31)),
+    max_cloud: float = Query(default=10.0, ge=0, le=100),
+):
+    from datetime import timedelta
+    from copernicus import search_sikasso_october
+
+    if start_date > end_date:
+        raise HTTPException(
+            status_code=422,
+            detail="End date must not precede start date.",
+        )
+
+    products = search_sikasso_october(
+        start_date=start_date.isoformat(),
+        end_date=(end_date + timedelta(days=1)).isoformat(),
+        max_cloud=max_cloud,
+    )
+
+    return [
+        {
+            "id": product["Id"],
+            "name": product["Name"],
+            "acquisitionDate": product["ContentDate"]["Start"][:10],
+            "productType": "Sentinel-2 Level-2A",
+            "availability": "Available" if product.get("Online") else "Unavailable",
+            
+"cloudCover": next(
+    (
+        attribute["Value"]
+        for attribute in product.get("Attributes", [])
+        if attribute.get("Name") == "cloudCover"
+    ),
+    None,
+),
+
+        }
+        for product in products
+    ]
+
+@app.post("/api/copernicus/products/{product_id}/save")
+def save_copernicus_product(product_id: str):
+    from uuid import UUID
+    from copernicus import get_product_by_id
+    from import_copernicus import import_products
+
+    try:
+        product_id = str(UUID(product_id))
+    except ValueError:
+        raise HTTPException(
+            status_code=422,
+            detail="Invalid Copernicus product ID.",
+        )
+
+    product = get_product_by_id(product_id)
+
+    if "MSIL2A" not in product.get("Name", ""):
+        raise HTTPException(
+            status_code=422,
+            detail="Only Sentinel-2 Level-2A products are supported.",
+        )
+
+    inserted = import_products([product])
+
+    return {
+        "status": "saved" if inserted == 1 else "already_exists",
+        "productId": product_id,
+    }
