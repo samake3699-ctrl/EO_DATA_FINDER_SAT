@@ -167,9 +167,15 @@ The tests use an isolated in-memory SQLite database instead of relying on the ap
 
 Development follows an iterative sprint-based workflow using GitHub Projects for task tracking and progress monitoring.
 
-**Sprint reports:**
-- [Sprint 1 — Product and Foundation](SPRINT_1.md)
-- Sprint 2 — Functional MVP (report in preparation)
+**Sprint reports and demo videos:**
+
+- **Sprint 1 — Product and Foundation**
+  - [Sprint 1 Report](SPRINT_1.md)
+  - [Watch Sprint 1 Demo](https://github.com/samake3699-ctrl/EO_DATA_FINDER_SAT/releases/tag/sprint-1)
+
+- **Sprint 2 — From Prototype to Functional MVP**
+  - [Sprint 2 Report](SPRINT_2.md)
+  - [Watch Sprint 2 Demo](https://github.com/samake3699-ctrl/EO_DATA_FINDER_SAT/releases/tag/sprint-2)
 
 **GitHub Project Board:**
 https://github.com/users/samake3699-ctrl/projects/1/views/1
