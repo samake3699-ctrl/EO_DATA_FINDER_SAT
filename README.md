@@ -154,14 +154,69 @@ Sprint 2 test results: **14 tests passed**.
 
 The tests use an isolated in-memory SQLite database instead of relying on the application's local development data.
 
+
 ## Current MVP limitations
 
-- The product catalogue currently contains three demonstration Sentinel-2 records.
-- Sikasso is the only supported pilot area; real spatial footprint filtering has not yet been implemented.
-- Live Copernicus catalogue integration is not yet available.
-- Real satellite band retrieval and processing are planned for future development.
-- NDVI, rainfall anomaly, and drought-risk indicators are currently simulated.
-- Environmental analysis outputs must not be interpreted as scientifically validated drought assessments or operational warnings.
+- Real Sentinel-2 Level-2A metadata is retrieved from the Copernicus catalogue.
+- Searches currently use the predefined Sikasso pilot location in Mali; arbitrary geographic area searches are not yet supported.
+- Each live catalogue search currently returns up to three products.
+- Acquisition date and maximum cloud coverage filtering are operational.
+- Selected product metadata can be saved in SQLite, with duplicate detection.
+- Satellite image bands are not yet downloaded or processed.
+- NDVI, rainfall anomaly, and drought-risk indicators are still simulated.
+- Environmental indicators must not be interpreted as scientifically validated drought assessments or operational warnings.
+
+
+
+## Sprint 3 — Growth
+
+Sprint 3 connects EO Data Finder to the real Copernicus
+Data Space catalogue and introduces persistent storage
+of selected Sentinel-2 product metadata.
+
+### Implemented features
+
+- Real Sentinel-2 Level-2A catalogue integration.
+- Date and maximum cloud coverage filters.
+- Satellite product search for the Sikasso pilot area.
+- Display of real acquisition dates, product names,
+  cloud coverage, and availability information.
+- Interactive product selection in React.
+- Saving selected product metadata in SQLite.
+- Duplicate product detection.
+- Navigation to the analysis workspace.
+- Improved search messages and interface feedback.
+
+### Application architecture
+
+React + Vite → FastAPI → Copernicus Data Space
+
+                       ↓
+                  SQLAlchemy
+                       ↓
+                     SQLite
+
+Copernicus provides real satellite product metadata.
+SQLite stores the metadata of selected products.
+Environmental analysis results remain simulated.
+
+### Testing and validation
+
+- 18 automated backend tests passed.
+- Successful live Copernicus catalogue search.
+- Successful product metadata persistence.
+- React search and analysis navigation validated.
+- Production build completed successfully.
+- Oxlint completed with zero warnings and errors.
+
+### Sprint 3 report
+
+See [Sprint 3 Report](SPRINT_3.md).
+
+The Sprint 3 demonstration video will be published
+separately.
+
+
 
 ## Agile project management
 
@@ -177,11 +232,28 @@ Development follows an iterative sprint-based workflow using GitHub Projects for
   - [Sprint 2 Report](SPRINT_2.md)
   - [Watch Sprint 2 Demo](https://github.com/samake3699-ctrl/EO_DATA_FINDER_SAT/releases/tag/sprint-2)
 
+  
+- **Sprint 3 — Growth**
+  - [Sprint 3 Report](SPRINT_3.md)
+  - Demo video: pending recording and publication.
+
+
 **GitHub Project Board:**
 https://github.com/users/samake3699-ctrl/projects/1/views/1
 
+
 ## Future development
 
-Planned improvements include live Sentinel-2 catalogue integration, satellite image processing, NDVI computation, rainfall data integration, and progressive development of the environmental analysis workflow.
+The next development stages will focus on:
 
-These capabilities will be introduced and validated through future sprints.
+- Retrieving only the Sentinel-2 bands required for analysis.
+- Organizing satellite data files separately from SQLite metadata.
+- Computing NDVI from real satellite imagery using Python.
+- Integrating rainfall data, including CHIRPS.
+- Developing and evaluating experimental drought-risk classification.
+- Visualizing analysis results through maps and charts.
+- Improving automated testing, reliability, and deployment practices.
+
+These capabilities are planned for future sprints and are not
+yet implemented.
+

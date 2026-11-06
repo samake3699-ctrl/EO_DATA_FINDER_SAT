@@ -266,9 +266,10 @@ async function handleSaveProduct() {
           <span>
             React is connected to FastAPI and SQLite. Satellite product searches
             support acquisition dates and cloud coverage, with Sikasso as the
-            pilot area. Product metadata and drought analysis remain
-            demonstrations; live satellite catalogue integration is planned
-            for a future sprint.
+            pilot area. Real Sentinel-2 product metadata is retrieved from the
+            Copernicus catalogue for the Sikasso pilot area.
+            Selected product metadata can be saved in SQLite.
+            Vegetation and drought-risk indicators are still simulated.
           </span>
       </div>
 
@@ -419,7 +420,7 @@ async function handleSaveProduct() {
 
           {products.length === 0 ? (
             <p className="empty-message">
-              No demonstration products match the selected search criteria.
+              No Sentinel-2 products match the selected search criteria.
               Try adjusting the acquisition dates or increasing the maximum
               cloud coverage.
             </p>
