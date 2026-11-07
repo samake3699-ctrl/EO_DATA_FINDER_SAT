@@ -33,3 +33,6 @@ backend/.pytest_cache/
 backend/*.db
 backend/*.sqlite
 backend/*.sqlite3
+
+# Sprint 4 - downloaded satellite imagery
+backend/data/
