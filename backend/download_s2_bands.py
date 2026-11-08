@@ -12,14 +12,15 @@ PROCESS_URL = "https://sh.dataspace.copernicus.eu/process/v1"
 # Order: west, south, east, north.
 BBOX = [-5.67654, 11.30755, -5.65654, 11.32755]
 
+
 EVALSCRIPT = """
 //VERSION=3
 
 function setup() {
     return {
-        input: ["B04", "B08", "dataMask"],
+        input: ["B04", "B08", "dataMask", "SCL"],
         output: {
-            bands: 3,
+            bands: 4,
             sampleType: "FLOAT32"
         }
     };
@@ -29,10 +30,12 @@ function evaluatePixel(sample) {
     return [
         sample.B04,
         sample.B08,
-        sample.dataMask
+        sample.dataMask,
+        sample.SCL
     ];
 }
 """
+
 
 payload = {
     "input": {
@@ -93,7 +96,7 @@ def download_bands():
     output_dir = Path(__file__).parent / "data" / "sentinel2"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    output_file = output_dir / "sikasso_20251028_bands.tif"
+    output_file = output_dir / "sikasso_20251028_with_scl.tif"
     output_file.write_bytes(image_data)
 
     print("Satellite file downloaded successfully")
