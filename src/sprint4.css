@@ -1,0 +1,201 @@
+
+/* SPRINT 4 - RESPONSIVE HOME */
+
+/* General width */
+.app-shell {
+  width: calc(100% - 32px);
+  max-width: none;
+  margin: 8px auto 0;
+}
+
+/* Compact header */
+.app-header.s2-header {
+  min-height: 0;
+  padding: 12px 20px;
+  align-items: center;
+}
+
+.app-header .eyebrow,
+.app-header .header-description,
+.app-header .header-tags {
+  display: none;
+}
+
+.app-header .s3-brand-icon {
+  width: 44px;
+  height: 44px;
+}
+
+.app-header .s3-brand-icon svg {
+  width: 34px;
+  height: 34px;
+}
+
+.app-header .s3-brand h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+/* Navigation */
+.s3-navigation {
+  margin: 8px 0;
+  padding: 4px;
+}
+
+.s3-navigation button {
+  padding: 9px 14px;
+}
+
+/* Hide the old technical notice */
+.prototype-notice.s2-notice {
+  display: none;
+}
+
+/* Two columns */
+.s4-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 38fr) minmax(0, 62fr);
+  gap: 16px;
+  margin-top: 12px;
+  align-items: stretch;
+}
+
+.s4-workspace > * {
+  min-width: 0;
+}
+
+/* Search panel */
+.s4-workspace .search-card {
+  margin: 0;
+  padding: 18px;
+}
+
+.s4-workspace .section-heading {
+  margin-bottom: 12px;
+}
+
+.s4-workspace .section-description,
+.s4-workspace .form-field small {
+  display: none;
+}
+
+.s4-workspace form {
+  gap: 12px;
+}
+
+/* Date fields side by side */
+.s4-workspace .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.s4-workspace .form-field {
+  gap: 5px;
+}
+
+/* Pilot area */
+.s4-workspace .form-field:nth-child(1) {
+  grid-column: 1 / -1;
+}
+
+/* Cloud coverage */
+.s4-workspace .form-field:nth-child(4) {
+  grid-column: 1 / -1;
+}
+
+/* Analysis module */
+.s4-workspace .form-field:nth-child(5) {
+  grid-column: 1 / -1;
+}
+
+.s4-workspace input,
+.s4-workspace select {
+  min-width: 0;
+  min-height: 42px;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+}
+
+.s4-workspace .form-actions {
+  display: block;
+  padding: 0;
+}
+
+.s4-workspace .primary-button {
+  width: 100%;
+  min-height: 44px;
+}
+
+/* Map panel */
+.s4-map-card {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-width: 0;
+  min-height: 0;
+  padding: 18px;
+}
+
+.s4-map-heading {
+  margin-bottom: 12px;
+}
+
+.s4-map-canvas {
+  flex: 1;
+  height: 100%;
+  min-height: 380px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.s4-leaflet-map {
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+}
+
+/* Tablets */
+@media (max-width: 1000px) {
+  .s4-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .s4-map-canvas,
+  .s4-leaflet-map {
+    min-height: 380px;
+  }
+}
+
+/* Phones */
+@media (max-width: 600px) {
+  .app-shell {
+    width: calc(100% - 20px);
+  }
+
+  .app-header.s2-header {
+    padding: 12px;
+  }
+
+  .header-badge {
+    display: none;
+  }
+
+  .s4-workspace .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .s4-workspace .form-field {
+    grid-column: auto !important;
+  }
+
+  .s4-workspace .search-card,
+  .s4-map-card {
+    padding: 16px;
+  }
+
+  .s4-map-canvas,
+  .s4-leaflet-map {
+    min-height: 320px;
+  }
+}

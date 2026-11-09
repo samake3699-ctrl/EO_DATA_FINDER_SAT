@@ -1570,3 +1570,602 @@ tbody tr:last-child td {
   font-weight: 600;
   line-height: 1.5;
 }
+
+/* SPRINT 4 — RESPONSIVE FOUNDATION */
+
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100%;
+}
+
+body {
+  overflow-x: clip;
+}
+
+.app-shell {
+  width: min(1440px, calc(100% - 32px));
+  max-width: 100%;
+  margin: 16px auto 0;
+}
+
+.app-header {
+  padding: clamp(20px, 2.5vw, 32px);
+  gap: 20px;
+}
+
+.app-header.s2-header {
+  min-height: 0;
+}
+
+.s3-brand h1 {
+  font-size: clamp(1.8rem, 3vw, 3rem);
+}
+
+.search-card,
+.results-card,
+.analysis-card {
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    width: calc(100% - 20px);
+    margin-top: 10px;
+  }
+
+  .app-header {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .header-main {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .s3-navigation {
+    flex-wrap: wrap;
+  }
+
+  .s3-navigation button {
+    flex: 1 1 auto;
+  }
+
+  .search-card,
+  .results-card,
+  .analysis-card {
+    padding: 18px;
+  }
+
+  .form-grid,
+  .analysis-layout,
+  .metrics-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .form-field-wide {
+    grid-column: auto;
+  }
+
+  .header-tags {
+    gap: 6px;
+  }
+}
+
+
+/* ============================================
+   SPRINT 4 - HOME LAYOUT
+   ============================================ */
+
+.s4-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 38fr) minmax(0, 62fr);
+  gap: 20px;
+  align-items: stretch;
+  margin-top: 20px;
+}
+
+.s4-workspace > * {
+  min-width: 0;
+}
+
+/* Search form on the left */
+
+.s4-workspace .search-card {
+  margin-top: 0;
+  padding: 24px;
+}
+
+.s4-workspace .form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+
+.s4-workspace .form-field-wide {
+  grid-column: auto;
+}
+
+.s4-workspace .form-actions {
+  display: block;
+}
+
+.s4-workspace .primary-button {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Interactive map on the right */
+
+.s4-map-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 570px;
+  padding: 20px;
+  background: white;
+  border: 1px solid #d9e8e0;
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(20, 65, 48, 0.07);
+}
+
+.s4-map-heading {
+  margin-bottom: 18px;
+}
+
+.s4-map-canvas {
+  flex: 1;
+  min-height: 440px;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid #d6e4dc;
+}
+
+.s4-leaflet-map {
+  width: 100%;
+  height: 100%;
+  min-height: 440px;
+  z-index: 0;
+}
+
+/* Responsive layout */
+
+@media (max-width: 1000px) {
+  .s4-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .s4-workspace {
+    gap: 14px;
+  }
+
+  .s4-workspace .search-card,
+  .s4-map-card {
+    padding: 16px;
+  }
+
+  .s4-map-canvas,
+  .s4-leaflet-map {
+    min-height: 330px;
+  }
+}
+
+/* ==========================================
+   SPRINT 4 - FULL WIDTH RESPONSIVE FIX
+   ========================================== */
+
+.app-shell {
+  width: calc(100% - 32px);
+  max-width: none;
+  margin: 16px auto 0;
+}
+
+/* Two-column workspace */
+
+.s4-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 38fr) minmax(0, 62fr);
+  gap: 18px;
+  width: 100%;
+  align-items: stretch;
+}
+
+/* Avoid horizontal overflow */
+
+.s4-workspace > *,
+.search-card,
+.s4-map-card {
+  min-width: 0;
+}
+
+/* More compact header */
+
+.app-header.s2-header {
+  min-height: 0;
+  padding: 22px 28px;
+}
+
+/* Compact search panel */
+
+.s4-workspace .search-card {
+  padding: 22px;
+}
+
+.s4-workspace .form-grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 13px;
+}
+
+.s4-workspace form {
+  gap: 16px;
+}
+
+/* Map proportions */
+
+.s4-map-card {
+  min-height: 0;
+  padding: 18px;
+}
+
+.s4-map-canvas {
+  min-height: 380px;
+}
+
+.s4-leaflet-map {
+  min-height: 380px;
+}
+
+/* Tablet and mobile */
+
+@media (max-width: 1000px) {
+  .s4-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .app-shell {
+    width: calc(100% - 20px);
+    margin-top: 10px;
+  }
+
+  .app-header.s2-header {
+    padding: 18px;
+  }
+
+  .s4-workspace .search-card,
+  .s4-map-card {
+    padding: 16px;
+  }
+
+  .s4-map-canvas,
+  .s4-leaflet-map {
+    min-height: 320px;
+  }
+}
+
+
+/* ============================================
+   SPRINT 4 - COMPACT DESKTOP LAYOUT
+   ============================================ */
+
+/* Header */
+
+.app-header.s2-header {
+  min-height: 0;
+  padding: 16px 24px;
+  gap: 12px;
+}
+
+.s3-brand {
+  gap: 12px;
+}
+
+.s3-brand-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+}
+
+.s3-brand-icon svg {
+  width: 36px;
+  height: 36px;
+}
+
+.s3-brand h1 {
+  font-size: clamp(1.7rem, 2.4vw, 2.2rem);
+  line-height: 1.15;
+}
+
+.app-header .eyebrow {
+  font-size: 0.65rem;
+  margin-bottom: 6px;
+}
+
+.header-description {
+  max-width: 750px;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  margin-top: 8px;
+}
+
+.header-tags {
+  margin-top: 10px;
+  gap: 6px;
+}
+
+.header-tags span {
+  padding: 5px 9px;
+  font-size: 0.68rem;
+}
+
+.header-badge {
+  padding: 7px 11px;
+  font-size: 0.72rem;
+}
+
+/* Navigation */
+
+.s3-navigation {
+  margin: 12px 0;
+  padding: 5px;
+  gap: 5px;
+  border-radius: 12px;
+}
+
+.s3-navigation button {
+  padding: 10px 15px;
+  font-size: 0.85rem;
+}
+
+/* Sprint information */
+
+.prototype-notice.s2-notice {
+  margin: 8px 0 12px;
+  padding: 8px 12px;
+  gap: 3px;
+}
+
+.prototype-notice.s2-notice strong {
+  font-size: 0.78rem;
+}
+
+.prototype-notice.s2-notice span {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Search and map */
+
+.s4-workspace {
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.s4-workspace .search-card {
+  padding: 18px 20px;
+}
+
+.s4-workspace .section-heading {
+  margin-bottom: 12px;
+}
+
+.s4-workspace .section-description {
+  margin-top: 5px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.s4-workspace form {
+  gap: 14px;
+}
+
+.s4-workspace .form-grid {
+  gap: 10px;
+}
+
+.s4-workspace .form-field {
+  gap: 5px;
+}
+
+.s4-workspace input,
+.s4-workspace select {
+  min-height: 40px;
+  padding: 8px 11px;
+  font-size: 0.85rem;
+}
+
+.s4-workspace .primary-button {
+  min-height: 42px;
+  padding: 10px;
+}
+
+/* Geographic map */
+
+.s4-map-card {
+  min-height: 0;
+  padding: 18px;
+}
+
+.s4-map-heading {
+  margin-bottom: 12px;
+}
+
+.s4-map-canvas,
+.s4-leaflet-map {
+  min-height: 390px;
+}
+
+/* Responsive adaptation */
+
+@media (max-width: 1000px) {
+  .s4-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .app-header.s2-header {
+    padding: 16px;
+  }
+
+  .header-badge {
+    align-self: flex-start;
+  }
+
+  .s4-map-canvas,
+  .s4-leaflet-map {
+    min-height: 320px;
+  }
+}
+
+/* ==========================================
+   SPRINT 4 - COMPACT HOME PAGE
+   TEST DE DISPOSITION
+   ========================================== */
+
+/* Reduce the top margin */
+.app-shell {
+  margin-top: 8px;
+}
+
+/* Compact header */
+.app-header.s2-header {
+  min-height: 0;
+  padding: 12px 20px;
+  align-items: center;
+}
+
+.app-header .eyebrow,
+.app-header .header-description,
+.app-header .header-tags {
+  display: none;
+}
+
+.app-header .s3-brand {
+  gap: 12px;
+}
+
+.app-header .s3-brand-icon {
+  width: 44px;
+  height: 44px;
+}
+
+.app-header .s3-brand-icon svg {
+  width: 34px;
+  height: 34px;
+}
+
+.app-header .s3-brand h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+/* Compact navigation */
+.s3-navigation {
+  margin: 8px 0;
+  padding: 4px;
+}
+
+.s3-navigation button {
+  padding: 9px 14px;
+}
+
+/* Hide the long technical notice on home */
+.prototype-notice.s2-notice {
+  display: none;
+}
+
+/* Search and map start directly below navigation */
+.s4-workspace {
+  margin-top: 10px;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.s4-workspace .search-card {
+  padding: 16px 20px;
+}
+
+.s4-workspace .section-heading {
+  margin-bottom: 10px;
+}
+
+.s4-workspace .section-description {
+  margin-top: 4px;
+}
+
+.s4-workspace form {
+  gap: 10px;
+}
+
+.s4-workspace .form-grid {
+  gap: 9px;
+}
+
+.s4-workspace .form-field {
+  gap: 4px;
+}
+
+.s4-workspace input,
+.s4-workspace select {
+  min-height: 40px;
+  padding: 8px 10px;
+}
+
+.s4-workspace .form-actions {
+  padding: 0;
+}
+
+.s4-workspace .primary-button {
+  min-height: 42px;
+}
+
+/* Map */
+.s4-map-card {
+  min-height: 0;
+  padding: 16px;
+}
+
+.s4-map-heading {
+  margin-bottom: 10px;
+}
+
+.s4-map-canvas {
+  min-height: 360px;
+}
+
+.s4-leaflet-map {
+  min-height: 360px;
+}
+
+/* Keep mobile layout accessible */
+@media (max-width: 1000px) {
+  .s4-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .app-header.s2-header {
+    padding: 12px;
+  }
+
+  .header-badge {
+    display: none;
+  }
+
+  .s4-map-canvas,
+  .s4-leaflet-map {
+    min-height: 300px;
+  }
+}

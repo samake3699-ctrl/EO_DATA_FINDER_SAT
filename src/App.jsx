@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router";
+import GeoMap from "./components/GeoMap.jsx";
 
 const PILOT_AREAS = [
   { value: "sikasso", label: "Sikasso, Mali" },
@@ -119,7 +120,7 @@ async function handleSearch(event) {
     setError("");
     navigate("/analysis");
   }
-  
+
 
 async function handleSaveProduct() {
   if (!selectedProductId) return;
@@ -157,9 +158,9 @@ async function handleSaveProduct() {
         <div className="header-main">
           <p className="eyebrow">Earth Observation Workspace</p>
 
-          
+
         <div className="s3-brand">
-          
+
 <span className="s3-brand-icon" aria-hidden="true">
   <svg
     viewBox="0 0 80 80"
@@ -238,7 +239,7 @@ async function handleSaveProduct() {
         <div className="header-badge">S3 · Geospatial Workspace</div>
       </header>
 
-      
+
 <nav className="s3-navigation" aria-label="Main navigation">
   <button
     type="button"
@@ -272,7 +273,7 @@ async function handleSaveProduct() {
             Vegetation and drought-risk indicators are still simulated.
           </span>
       </div>
-
+      <div className="s4-workspace">
       <section className="search-card">
         <div className="section-heading">
           <div>
@@ -382,6 +383,10 @@ async function handleSaveProduct() {
         )}
       </section>
 
+      <GeoMap searchCompleted={searchCompleted} />
+
+      </div>
+
       {searchCompleted && (
         <section className="results-card">
           <div className="section-heading">
@@ -483,7 +488,7 @@ async function handleSaveProduct() {
               </div>
 
               <div className="results-actions">
-                
+
 <div className="selection-help">
   {selectedProduct ? (
     <div className="s3-selected-product">
@@ -518,7 +523,7 @@ async function handleSaveProduct() {
                   Open analysis workspace
                 </button>
               </div>
-              
+
 {saveMessage && (
   <p className="s3-save-message" role="status">
     {saveMessage}
