@@ -383,8 +383,10 @@ async function handleSaveProduct() {
         )}
       </section>
 
-      <GeoMap searchCompleted={searchCompleted} />
-
+<GeoMap
+  searchCompleted={searchCompleted}
+  selectedProduct={selectedProduct}
+/>
       </div>
 
       {searchCompleted && (

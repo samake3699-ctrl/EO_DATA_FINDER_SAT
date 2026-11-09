@@ -199,3 +199,135 @@
     min-height: 320px;
   }
 }
+
+/* Sprint 4 - Map view button */
+
+.s4-map-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.s4-reset-map {
+  flex-shrink: 0;
+  padding: 9px 14px;
+  background: #e5f3e9;
+  border: 1px solid #c6e4d2;
+  border-radius: 9px;
+  color: #176b49;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.s4-reset-map:hover {
+  background: #d4ebdd;
+}
+
+@media (max-width: 600px) {
+  .s4-map-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* =========================================
+   SPRINT 4 - GEOGRAPHIC INFORMATION
+   ========================================= */
+
+.s4-map-info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.s4-map-info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px 10px;
+  background: #edf7f1;
+  border: 1px solid #e0eee5;
+  border-radius: 10px;
+}
+
+.s4-map-info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  color: #176b49;
+  font-size: 20px;
+}
+
+.s4-map-info-item div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.s4-map-info-item small {
+  color: #667b6d;
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.s4-map-info-item strong {
+  color: #20543d;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.s4-map-heading h2 {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1250px) {
+  .s4-map-info-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .s4-map-info-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* SPRINT 4 - MAP HEIGHT ADJUSTMENT */
+
+@media (min-width: 1001px) {
+  .s4-map-card {
+    padding: 14px;
+  }
+
+  .s4-map-heading {
+    margin-bottom: 8px;
+  }
+
+  .s4-map-canvas {
+    flex: 1 1 auto;
+    height: clamp(260px, 48vh, 440px);
+    min-height: 0;
+  }
+
+  .s4-leaflet-map {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .s4-map-info-grid {
+    margin-top: 8px;
+    gap: 8px;
+  }
+
+  .s4-map-info-item {
+    padding: 8px;
+  }
+}

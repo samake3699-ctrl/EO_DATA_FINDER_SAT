@@ -139,6 +139,7 @@ def get_copernicus_products(
             "name": product["Name"],
             "acquisitionDate": product["ContentDate"]["Start"][:10],
             "productType": "Sentinel-2 Level-2A",
+            "geoFootprint": product.get("GeoFootprint"),
             "availability": "Available" if product.get("Online") else "Unavailable",
             
 "cloudCover": next(
