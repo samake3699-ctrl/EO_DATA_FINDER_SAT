@@ -144,15 +144,21 @@ Both the frontend and backend servers must be running to use the integrated appl
 
 ## Automated tests
 
-From the `backend` directory, execute:
+From the `backend` directory, run:
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest tests/test_products.py -v
+.\.venv\Scripts\python.exe -m pytest tests -v
 ```
 
-Sprint 2 test results: **14 tests passed**.
+Sprint 2: 14 automated tests passed.
 
-The tests use an isolated in-memory SQLite database instead of relying on the application's local development data.
+Sprint 3: 18 automated tests passed.
+
+The tests validate API endpoints, search filters, product
+metadata handling, and duplicate detection.
+
+Tests use isolated test data and mocked Copernicus responses.
+Live catalogue connectivity was also checked separately.
 
 
 ## Current MVP limitations
