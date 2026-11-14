@@ -5,7 +5,7 @@
 **Group:** M80-103CB-26
 **University:** Moscow Aviation Institute (MAI)
 **Sprint period:** November 2–15, 2026  
-**Sprint status:** Technical implementation validated; documentation and demonstration pending.
+**Sprint status:** Technical implementation and demonstration completed.
 
 ## 1. Sprint Goal
 
@@ -57,9 +57,8 @@ These principles support the current prototype architecture and help identify im
 
 ## 7. Next Steps
 
-- Finalize Sprint 3 documentation and GitHub Project Board.
-- Prepare the Sprint 3 demonstration video.
-- Begin Sprint 4 development in a separate branch.
+- Complete the Sprint 3 GitHub Project Board closeout.
+- Continue Sprint 4 development in a separate branch.
 
 ## 8. Sprint 3 Deliverables
 
@@ -70,7 +69,7 @@ https://github.com/samake3699-ctrl/EO_DATA_FINDER_SAT/tree/s3-prep
 https://github.com/users/samake3699-ctrl/projects/1/views/1
 
 **Demo video:**
-Pending recording and publication.
+[EO-DATA-FINDER-S3.mp4](https://github.com/samake3699-ctrl/EO_DATA_FINDER_SAT/releases/tag/sprint-3)
 
 **Book Reference:**
 Martin Kleppmann, Designing Data-Intensive Applications,
