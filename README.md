@@ -209,12 +209,10 @@ Environmental analysis results remain simulated.
 - Production build completed successfully.
 - Oxlint completed with zero warnings and errors.
 
-### Sprint 3 report
+### Sprint 3 report and demonstration
 
-See [Sprint 3 Report](SPRINT_3.md).
-
-The Sprint 3 demonstration video will be published
-separately.
+- [Sprint 3 Report](SPRINT_3.md)
+- [Watch Sprint 3 Demo](https://github.com/samake3699-ctrl/EO_DATA_FINDER_SAT/releases/tag/sprint-3)
 
 
 
@@ -235,7 +233,7 @@ Development follows an iterative sprint-based workflow using GitHub Projects for
   
 - **Sprint 3 — Growth**
   - [Sprint 3 Report](SPRINT_3.md)
-  - Demo video: pending recording and publication.
+  - [Watch Sprint 3 Demo](https://github.com/samake3699-ctrl/EO_DATA_FINDER_SAT/releases/tag/sprint-3)
 
 
 **GitHub Project Board:**
