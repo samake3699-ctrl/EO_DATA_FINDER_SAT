@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router";
 import GeoMap from "./components/GeoMap.jsx";
 
@@ -22,10 +22,59 @@ function App() {
   const [searchCompleted, setSearchCompleted] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
+  const [analysisData, setAnalysisData] = useState(null);
+  const [analysisLoading, setAnalysisLoading] = useState(false);
+  const [analysisError, setAnalysisError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
   const isAnalysisPage = location.pathname === "/analysis";
+
+
+useEffect(() => {
+  if (!isAnalysisPage) return;
+
+  const controller = new AbortController();
+
+  async function loadAnalysisResults() {
+    setAnalysisLoading(true);
+    setAnalysisError("");
+
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/analysis/results",
+        { signal: controller.signal }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.ndviAnalysis || !data.rainfallAnalysis) {
+        throw new Error("Incomplete analysis data");
+      }
+
+      if (!controller.signal.aborted) {
+        setAnalysisData(data);
+      }
+    } catch (error) {
+      if (!controller.signal.aborted) {
+        setAnalysisError("Unable to load analysis results.");
+        setAnalysisData(null);
+      }
+    } finally {
+      if (!controller.signal.aborted) {
+        setAnalysisLoading(false);
+      }
+    }
+  }
+
+  loadAnalysisResults();
+
+  return () => controller.abort();
+}, [isAnalysisPage]);
 
   const selectedProduct = useMemo(
     () =>
@@ -577,114 +626,129 @@ async function handleSaveProduct() {
           </div>
 
           <div className="analysis-layout">
-            <article className="map-panel">
-              <div className="panel-title">
-                <div>
-                  <p className="step-label">Vegetation indicator</p>
-                  <h3>NDVI condition map</h3>
-                </div>
+            
+<article className="map-panel">
+  <div className="panel-title">
+    <div>
+      <p className="step-label">Vegetation indicator</p>
+      <h3>NDVI condition map</h3>
+    </div>
 
-                <span className="demo-label-inline">Simulated</span>
-              </div>
+    <span className="demo-label-inline">
+      Real pilot data
+    </span>
+  </div>
 
-              <div className="simulated-map">
-                <div className="map-location">
-                  <span>Pilot area</span>
-                  <strong>{selectedAreaLabel}</strong>
-                </div>
+  <div
+    style={{
+      height: "700px",
+      backgroundColor: "#f8faf9",
+      borderRadius: "12px",
+      overflow: "hidden"
+    }}
+  >
+    <img
+      src="http://127.0.0.1:8000/api/analysis/ndvi-preview"
+      alt="Real Sentinel-2 NDVI map for Sikasso, 28 October 2025"
+      style={{
+        display: "block",
+        width: "100%",
+        height: "100%",
+        objectFit: "contain"
+      }}
+    />
+  </div>
 
-                <div className="map-status">
-                  SIMULATED NDVI SURFACE
-                </div>
-              </div>
+  <p className="validation-note">
+    Real Sentinel-2 NDVI raster · Sikasso · 28 October 2025.
+    Fixed pilot dataset, not automatically linked to the
+    selected catalogue product.
+  </p>
+</article>
 
-              <div className="legend">
-                <span>
-                  <i className="legend-color low-color" />
-                  Low vegetation
-                </span>
-
-                <span>
-                  <i className="legend-color moderate-color" />
-                  Moderate
-                </span>
-
-                <span>
-                  <i className="legend-color healthy-color" />
-                  Healthy
-                </span>
-              </div>
-            </article>
 
             <div className="analysis-details">
               <div className="metrics-grid">
-                <article className="metric-card">
-                  <span>Mean NDVI</span>
-                  <strong className="green-value">0.42</strong>
-                  <small>Demonstration value</small>
-                </article>
+                
+<article className="metric-card">
+  <span>Mean NDVI</span>
 
-                <article className="metric-card">
-                  <span>Rainfall anomaly</span>
-                  <strong className="orange-value">−18%</strong>
-                  <small>Demonstration value</small>
-                </article>
+  <strong className="green-value">
+    {analysisLoading
+      ? "Loading..."
+      : analysisError
+        ? "Unavailable"
+        : analysisData
+          ? analysisData.ndviAnalysis.ndvi.mean.toFixed(4)
+          : "No data"}
+  </strong>
 
-                <article className="metric-card">
-                  <span>Drought risk</span>
-                  <strong className="risk-value">Moderate</strong>
-                  <small>Experimental estimate</small>
-                </article>
+  <small>Sentinel-2 · Sikasso · 28 October 2025</small>
+</article>
+
+
+                
+<article className="metric-card">
+  <span>Rainfall anomaly</span>
+
+  <strong className="orange-value">
+    {analysisLoading
+      ? "Loading..."
+      : analysisError
+        ? "Unavailable"
+        : analysisData
+          ? `${analysisData.rainfallAnalysis.primaryReference.anomalyPercent.toFixed(2)}%`
+          : "No data"}
+  </strong>
+
+  <small>CHIRPS · October 2025 · Baseline 1991–2020</small>
+</article>
+
+
+                
+<article className="metric-card">
+  <span>Drought risk</span>
+  <strong className="risk-value">
+    Not calculated
+  </strong>
+  <small>Planned for Sprint 5</small>
+</article>
+
               </div>
 
-              <article className="indicator-panel">
-                <div className="indicator-heading">
-                  <div>
-                    <p className="step-label">Indicators</p>
-                    <h3>Observed conditions</h3>
-                  </div>
+              
+<article className="indicator-panel">
+  <div className="indicator-heading">
+    <div>
+      <p className="step-label">
+        Rainfall indicator
+      </p>
+      <h3>CHIRPS rainfall comparison</h3>
+    </div>
 
-                  <span className="demo-label-inline">
-                    Demo values
-                  </span>
-                </div>
+    <span className="demo-label-inline">
+      Real pilot data
+    </span>
+  </div>
 
-                <div className="indicator-row">
-                  <span>Vegetation condition</span>
+  <img
+    src="http://127.0.0.1:8000/api/analysis/chirps-chart"
+    alt="CHIRPS rainfall comparison for Sikasso: historical averages and October 2025 rainfall"
+    style={{
+      display: "block",
+      width: "100%",
+      height: "auto",
+      borderRadius: "8px"
+    }}
+  />
 
-                  <div className="progress-track">
-                    <div className="progress-fill vegetation-progress" />
-                  </div>
+  <p className="validation-note">
+    CHIRPS v3 · Sikasso pilot point · October 2025.
+    Comparison with the 1991–2020 and 1995–2024
+    historical references.
+  </p>
+</article>
 
-                  <strong>42%</strong>
-                </div>
-
-                <div className="indicator-row">
-                  <span>Rainfall level</span>
-
-                  <div className="progress-track">
-                    <div className="progress-fill rainfall-progress" />
-                  </div>
-
-                  <strong>32%</strong>
-                </div>
-
-                <div className="indicator-row">
-                  <span>Model confidence</span>
-
-                  <div className="progress-track">
-                    <div className="progress-fill confidence-progress" />
-                  </div>
-
-                  <strong>N/A</strong>
-                </div>
-
-                <p className="validation-note">
-                  A real confidence score will only be displayed after the
-                  Python model has been trained, tested and validated using
-                  historical data.
-                </p>
-              </article>
             </div>
           </div>
 

@@ -2,7 +2,8 @@ from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import date
 from typing import Literal
-
+from pathlib import Path
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 import models
@@ -183,3 +184,73 @@ def save_copernicus_product(product_id: str):
         "status": "saved" if inserted == 1 else "already_exists",
         "productId": product_id,
     }
+
+# Sprint 4 - Real NDVI and CHIRPS analysis results
+
+@app.get("/api/analysis/results")
+def get_analysis_results():
+    from analysis_results import get_ndvi_results, get_chirps_results
+
+    try:
+        return {
+            "ndviAnalysis": get_ndvi_results(),
+            "rainfallAnalysis": get_chirps_results()
+        }
+
+    except FileNotFoundError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="Required analysis data file is missing."
+        ) from exc
+
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="Analysis data is invalid or unavailable."
+        ) from exc
+
+
+# Sprint 4 - Serve the real Sentinel-2 NDVI preview
+
+@app.get("/api/analysis/ndvi-preview")
+def get_ndvi_preview():
+    image_path = (
+        Path(__file__).resolve().parent
+        / "data"
+        / "sentinel2"
+        / "sikasso_20251028_ndvi_preview.png"
+    )
+
+    if not image_path.is_file():
+        raise HTTPException(
+            status_code=503,
+            detail="NDVI preview image is unavailable."
+        )
+
+    return FileResponse(
+        path=image_path,
+        media_type="image/png"
+    )
+
+
+# Sprint 4 - Serve the real CHIRPS rainfall chart
+
+@app.get("/api/analysis/chirps-chart")
+def get_chirps_chart():
+    chart_path = (
+        Path(__file__).resolve().parent
+        / "data"
+        / "chirps"
+        / "sikasso_chirps_comparison.png"
+    )
+
+    if not chart_path.is_file():
+        raise HTTPException(
+            status_code=503,
+            detail="CHIRPS rainfall chart is unavailable."
+        )
+
+    return FileResponse(
+        path=chart_path,
+        media_type="image/png"
+    )

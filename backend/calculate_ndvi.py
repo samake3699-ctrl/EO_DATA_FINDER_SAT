@@ -71,3 +71,51 @@ with rasterio.open(output_path, "w", **profile) as dst:
     dst.set_band_description(1, "NDVI")
 
 print("Carte NDVI enregistree :", output_path)
+
+# STEP 8 - Generate a real NDVI map preview for the web interface
+
+import matplotlib.pyplot as plt
+
+with rasterio.open(output_path) as src:
+    ndvi_map = src.read(1, masked=True)
+    bounds = src.bounds
+
+ndvi_map = np.ma.masked_invalid(ndvi_map)
+
+cmap = plt.get_cmap("RdYlGn").copy()
+cmap.set_bad("#e5e7eb")
+
+fig, ax = plt.subplots(figsize=(6, 6))
+
+image = ax.imshow(
+    ndvi_map,
+    cmap=cmap,
+    vmin=-0.2,
+    vmax=0.9,
+    extent=[
+        bounds.left,
+        bounds.right,
+        bounds.bottom,
+        bounds.top
+    ],
+    origin="upper",
+    interpolation="nearest"
+)
+
+ax.set_title("Sentinel-2 NDVI - Sikasso - 28 October 2025")
+ax.set_xlabel("Longitude")
+ax.set_ylabel("Latitude")
+
+colorbar = fig.colorbar(image, ax=ax, shrink=0.85)
+colorbar.set_label("NDVI")
+
+fig.tight_layout()
+
+preview_path = output_path.with_name(
+    "sikasso_20251028_ndvi_preview.png"
+)
+
+fig.savefig(preview_path, dpi=160, bbox_inches="tight")
+plt.close(fig)
+
+print("NDVI preview saved:", preview_path)
