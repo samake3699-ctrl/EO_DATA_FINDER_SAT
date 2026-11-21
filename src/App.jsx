@@ -41,8 +41,23 @@ useEffect(() => {
     setAnalysisError("");
 
     try {
+
+const prepareResponse = await fetch(
+  `http://127.0.0.1:8000/api/analysis/products/${selectedProductId}/prepare`,
+  {
+    method: "POST",
+    signal: controller.signal
+  }
+);
+
+if (!prepareResponse.ok) {
+  throw new Error(
+    `Product preparation failed: HTTP ${prepareResponse.status}`
+  );
+}
+
       const response = await fetch(
-        "http://127.0.0.1:8000/api/analysis/results",
+        `http://127.0.0.1:8000/api/analysis/products/${selectedProductId}`,
         { signal: controller.signal }
       );
 
@@ -74,7 +89,7 @@ useEffect(() => {
   loadAnalysisResults();
 
   return () => controller.abort();
-}, [isAnalysisPage]);
+}, [isAnalysisPage, selectedProductId]);
 
   const selectedProduct = useMemo(
     () =>
@@ -285,7 +300,7 @@ async function handleSaveProduct() {
           </div>
         </div>
 
-        <div className="header-badge">S3 · Geospatial Workspace</div>
+        <div className="header-badge">S4 · Environmental Analytics</div>
       </header>
 
 
@@ -312,14 +327,16 @@ async function handleSaveProduct() {
   <>
 
       <div className="prototype-notice s2-notice">
-        <strong>Sprint 3 — Geospatial Workspace:</strong>
+        <strong>Sprint 4 — Environmental Analytics:</strong>
           <span>
             React is connected to FastAPI and SQLite. Satellite product searches
             support acquisition dates and cloud coverage, with Sikasso as the
             pilot area. Real Sentinel-2 product metadata is retrieved from the
             Copernicus catalogue for the Sikasso pilot area.
             Selected product metadata can be saved in SQLite.
-            Vegetation and drought-risk indicators are still simulated.
+            Real NDVI and CHIRPS indicators are available for the
+            Sikasso October 2025 pilot dataset. Drought-risk
+            prediction is planned for Sprint 5.
           </span>
       </div>
       <div className="s4-workspace">
@@ -589,33 +606,36 @@ async function handleSaveProduct() {
   )}
       {isAnalysisPage && selectedProduct && (
         <section className="analysis-card">
-          <button
-  type="button"
-  className="s3-back-button"
-  onClick={() => navigate("/")}
->
-  ← Back to Satellite Catalogue
-</button>
-          <div className="section-heading">
-            <div>
-              <p className="step-label">03 · Analysis</p>
-              <h2>Vegetation & drought analysis</h2>
 
-              <p className="section-description">
-                Visual preview of the analysis workspace planned for the Python
-                processing pipeline.
-              </p>
-            </div>
+          
+<div className="s4-analysis-heading">
+  <button
+    type="button"
+    className="s3-back-button s4-analysis-back"
+    onClick={() => navigate("/")}
+  >
+    ← Back to Satellite Catalogue
+  </button>
 
-            <span className="status-label warning-label">
-              Experimental
-            </span>
-          </div>
+  <h2>Vegetation & drought analysis</h2>
+
+  <div className="s4-analysis-heading-side">
+    <span className="s4-analysis-step">03 · Analysis</span>
+    <span className="status-label warning-label">
+      Experimental
+    </span>
+  </div>
+</div>
 
           <div className="analysis-product-bar">
             <div>
               <span>Selected Sentinel-2 product</span>
-              <strong>{selectedProduct.name}</strong>
+              <strong
+  className="s4-product-name"
+  title={selectedProduct.name}
+>
+  {selectedProduct.name}
+</strong>
             </div>
 
             <div className="analysis-product-meta">
@@ -639,31 +659,32 @@ async function handleSaveProduct() {
     </span>
   </div>
 
-  <div
-    style={{
-      height: "700px",
-      backgroundColor: "#f8faf9",
-      borderRadius: "12px",
-      overflow: "hidden"
-    }}
-  >
-    <img
-      src="http://127.0.0.1:8000/api/analysis/ndvi-preview"
-      alt="Real Sentinel-2 NDVI map for Sikasso, 28 October 2025"
-      style={{
-        display: "block",
-        width: "100%",
-        height: "100%",
-        objectFit: "contain"
-      }}
-    />
+  <div className="s4-analysis-visual">
+
+{analysisData?.ndviAnalysis?.productId === selectedProductId ? (
+  <img
+    key={selectedProductId}
+    src={`http://127.0.0.1:8000/api/analysis/products/${selectedProductId}/ndvi-preview`}
+    alt={`Sentinel-2 NDVI map for Sikasso, ${analysisData.ndviAnalysis.acquisitionDate}`}
+    className="s4-analysis-img"
+  />
+) : (
+  <p className="validation-note">
+    {analysisLoading
+      ? "Preparing NDVI map for the selected product..."
+      : analysisError
+        ? analysisError
+        : "No NDVI map available for this product."}
+  </p>
+)}
+
   </div>
 
   <p className="validation-note">
-    Real Sentinel-2 NDVI raster · Sikasso · 28 October 2025.
-    Fixed pilot dataset, not automatically linked to the
-    selected catalogue product.
-  </p>
+  Real Sentinel-2 NDVI raster · Sikasso ·
+  {" "}{analysisData?.ndviAnalysis?.acquisitionDate ?? "Loading"}.
+  Analysis linked to the selected catalogue product.
+</p>
 </article>
 
 
@@ -683,7 +704,10 @@ async function handleSaveProduct() {
           : "No data"}
   </strong>
 
-  <small>Sentinel-2 · Sikasso · 28 October 2025</small>
+  <small>
+  Sentinel-2 · Sikasso ·{" "}
+  {analysisData?.ndviAnalysis?.acquisitionDate ?? "Loading..."}
+</small>
 </article>
 
 
@@ -731,16 +755,13 @@ async function handleSaveProduct() {
     </span>
   </div>
 
+  <div className="s4-analysis-visual">
   <img
     src="http://127.0.0.1:8000/api/analysis/chirps-chart"
-    alt="CHIRPS rainfall comparison for Sikasso: historical averages and October 2025 rainfall"
-    style={{
-      display: "block",
-      width: "100%",
-      height: "auto",
-      borderRadius: "8px"
-    }}
+    alt="CHIRPS rainfall comparison for Sikasso"
+    className="s4-analysis-img"
   />
+</div>
 
   <p className="validation-note">
     CHIRPS v3 · Sikasso pilot point · October 2025.
@@ -754,7 +775,7 @@ async function handleSaveProduct() {
 
           <div className="data-sources-heading">
             <p className="step-label">Processing pipeline</p>
-            <h3>Planned data sources</h3>
+            <h3>Data sources and processing</h3>
           </div>
 
           <div className="data-sources">
@@ -777,16 +798,27 @@ async function handleSaveProduct() {
             </div>
           </div>
 
-          <p className="analysis-disclaimer">
-            This interface currently contains simulated analysis values. It
-            must not be interpreted as an operational drought warning or a
-            scientifically validated environmental assessment.
-          </p>
+          
+
+<p className="analysis-disclaimer">
+  Sprint 4 — Real satellite analysis for Sikasso, Mali.
+  The NDVI map and statistics are calculated from
+  the selected Sentinel-2 product.
+
+  Rainfall anomalies are derived from CHIRPS v3
+  for October 2025, using historical references.
+
+  Drought-risk prediction is planned for Sprint 5.
+  These results are experimental and do not
+  constitute an operational drought warning.
+</p>
+
+
         </section>
       )}
 
       <footer className="app-footer">
-        EO Data Finder · Sprint 3 · Geospatial Intelligence Workspace
+        EO Data Finder · Sprint 4 · Environmental Analytics
       </footer>
     </main>
   );
