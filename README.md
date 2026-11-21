@@ -142,6 +142,39 @@ Start FastAPI:
 
 Both the frontend and backend servers must be running to use the integrated application.
 
+
+### Copernicus configuration
+
+Create a local `.env` file in the `backend` directory,
+using `.env.example` as a template.
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Replace the placeholder values with your own
+Copernicus Data Space OAuth client credentials.
+
+Never commit `.env` to GitHub.
+
+### Satellite and rainfall data
+
+Sentinel-2 bands are downloaded automatically when
+a product is selected for analysis.
+
+The application stores generated NDVI GeoTIFF,
+PNG and JSON files locally in `backend/data/sentinel2/`.
+
+The CHIRPS analysis currently requires monthly
+October GeoTIFF files for 1991–2025 in
+`backend/data/chirps/`, named:
+
+`chirps-v3.0.YYYY.10.tif`
+
+These raster files are not included in the repository.
+Without them, the rainfall analysis cannot be reproduced.
+```
+
 ## Automated tests
 
 From the `backend` directory, run:
@@ -161,18 +194,50 @@ Tests use isolated test data and mocked Copernicus responses.
 Live catalogue connectivity was also checked separately.
 
 
-## Current MVP limitations
+## Sprint 4 — Environmental Analytics
 
-- Real Sentinel-2 Level-2A metadata is retrieved from the Copernicus catalogue.
-- Searches currently use the predefined Sikasso pilot location in Mali; arbitrary geographic area searches are not yet supported.
-- Each live catalogue search currently returns up to three products.
-- Acquisition date and maximum cloud coverage filtering are operational.
-- Selected product metadata can be saved in SQLite, with duplicate detection.
-- Satellite image bands are not yet downloaded or processed.
-- NDVI, rainfall anomaly, and drought-risk indicators are still simulated.
-- Environmental indicators must not be interpreted as scientifically validated drought assessments or operational warnings.
+Sprint 4 introduces real environmental analysis for the
+Sikasso pilot area in Mali.
 
+### Implemented features
 
+- Search for real Sentinel-2 Level-2A products.
+- Select a satellite product for analysis.
+- Automatically download B04, B08, dataMask and SCL.
+- Calculate NDVI for the selected product.
+- Exclude invalid or unsuitable pixels using SCL.
+- Generate a georeferenced NDVI GeoTIFF and PNG preview.
+- Calculate October 2025 rainfall anomalies using CHIRPS v3.
+- Compare rainfall against 1991–2020 and 1995–2024.
+- Display real results in the React Analysis Workspace.
+- Reuse previously generated product analyses.
+
+### Architecture
+
+React + Vite → FastAPI → Copernicus Data Space
+                     ↓
+             Python + Rasterio
+                     ↓
+        NDVI GeoTIFF / PNG / JSON
+
+CHIRPS historical files → Python → Rainfall anomalies
+
+### Testing
+
+- 23 automated Python tests passed.
+- Real Sentinel-2 product processing tested manually.
+- Dynamic NDVI map and statistics displayed in React.
+
+### Current limitations
+
+- Only the Sikasso pilot area is supported.
+- CHIRPS rainfall represents one pilot grid location.
+- Rainfall analysis currently uses October 2025.
+- Raster files are stored locally and excluded from Git.
+- Historical CHIRPS files must be obtained separately.
+- Drought-risk prediction is not implemented yet.
+- Results are experimental, not operational warnings.
+```
 
 ## Sprint 3 — Growth
 
