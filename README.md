@@ -173,7 +173,6 @@ October GeoTIFF files for 1991–2025 in
 
 These raster files are not included in the repository.
 Without them, the rainfall analysis cannot be reproduced.
-```
 
 ## Automated tests
 
@@ -311,18 +310,17 @@ Development follows an iterative sprint-based workflow using GitHub Projects for
 https://github.com/users/samake3699-ctrl/projects/1/views/1
 
 
-## Future development
 
-The next development stages will focus on:
+## Future development — Sprint 5
 
-- Retrieving only the Sentinel-2 bands required for analysis.
-- Organizing satellite data files separately from SQLite metadata.
-- Computing NDVI from real satellite imagery using Python.
-- Integrating rainfall data, including CHIRPS.
-- Developing and evaluating experimental drought-risk classification.
-- Visualizing analysis results through maps and charts.
-- Improving automated testing, reliability, and deployment practices.
+The next development phase will focus on:
 
-These capabilities are planned for future sprints and are not
-yet implemented.
+- Developing an experimental drought-risk model.
+- Combining vegetation and rainfall indicators.
+- Evaluating the model with suitable reference data.
+- Displaying interpretable drought-risk results.
+- Supporting analysis export and additional areas.
+- Improving automated testing and deployment.
 
+Sprint 4 provides the real-data processing foundation.
+Drought-risk prediction is not yet implemented.
