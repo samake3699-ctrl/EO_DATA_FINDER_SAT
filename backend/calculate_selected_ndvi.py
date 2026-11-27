@@ -85,7 +85,7 @@ def calculate_selected_ndvi(product_id):
         dst.set_band_description(1, "NDVI")
 
     # Generate map preview
-    fig, ax = plt.subplots(figsize=(6, 6))
+    fig, ax = plt.subplots(figsize=(7, 5))
 
     image = ax.imshow(
         np.ma.masked_invalid(ndvi),
@@ -108,15 +108,25 @@ def calculate_selected_ndvi(product_id):
     ax.set_xlabel("Longitude")
     ax.set_ylabel("Latitude")
 
-    fig.colorbar(image, ax=ax, label="NDVI")
-    fig.tight_layout()
+    ax.set_aspect("equal", adjustable="box")
+
+    fig.colorbar(
+        image,
+        ax=ax,
+        label="NDVI",
+        fraction=0.045,
+        pad=0.02
+    )
+
+    fig.tight_layout(pad=0.3)
 
     preview_file = DATA_DIR / f"{product_id}_ndvi_preview.png"
 
     fig.savefig(
         preview_file,
-        dpi=160,
-        bbox_inches="tight"
+        dpi=180,
+        bbox_inches="tight",
+        pad_inches=0.04
     )
     plt.close(fig)
 

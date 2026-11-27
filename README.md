@@ -223,7 +223,7 @@ CHIRPS historical files → Python → Rainfall anomalies
 
 ### Testing
 
-- 23 automated Python tests passed.
+- 26 automated Python tests passed, including 3 scientific calculation tests.
 - Real Sentinel-2 product processing tested manually.
 - Dynamic NDVI map and statistics displayed in React.
 
@@ -236,7 +236,6 @@ CHIRPS historical files → Python → Rainfall anomalies
 - Historical CHIRPS files must be obtained separately.
 - Drought-risk prediction is not implemented yet.
 - Results are experimental, not operational warnings.
-```
 
 ## Sprint 3 — Growth
 
@@ -305,22 +304,27 @@ Development follows an iterative sprint-based workflow using GitHub Projects for
   - [Sprint 3 Report](SPRINT_3.md)
   - [Watch Sprint 3 Demo](https://github.com/samake3699-ctrl/EO_DATA_FINDER_SAT/releases/tag/sprint-3)
 
+- **Sprint 4 — Environmental Analytics**
+  - [Sprint 4 Report](SPRINT_4.md)
+  - Demo video: coming soon
 
 **GitHub Project Board:**
 https://github.com/users/samake3699-ctrl/projects/1/views/1
 
 
 
-## Future development — Sprint 5
+## Sprint 5 — Finalization
 
-The next development phase will focus on:
+Sprint 5 will focus on completing and polishing the
+experimental MVP.
 
-- Developing an experimental drought-risk model.
-- Combining vegetation and rainfall indicators.
-- Evaluating the model with suitable reference data.
-- Displaying interpretable drought-risk results.
-- Supporting analysis export and additional areas.
-- Improving automated testing and deployment.
+Planned work:
+- Complete the experimental drought-risk indicator
+  (Low, Moderate, High).
+- Combine NDVI and CHIRPS rainfall indicators.
+- Add analysis export functionality.
+- Improve testing and documentation.
+- Prepare the final demo and Agile reflection.
 
-Sprint 4 provides the real-data processing foundation.
-Drought-risk prediction is not yet implemented.
+The drought-risk result will be clearly labelled
+as experimental, not an operational warning.

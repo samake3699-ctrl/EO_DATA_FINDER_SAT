@@ -548,3 +548,159 @@
     height: 300px;
   }
 }
+
+/* =========================================
+   SPRINT 4 — FINAL VIDEO POLISH
+   ========================================= */
+
+
+/* Compact Mali map — Sprint 4 */
+
+@media (min-width: 1001px) {
+  .s4-map-card {
+    padding: 12px;
+    align-self: start;
+  }
+
+  .s4-map-canvas {
+    flex: 0 0 auto;
+    height: clamp(230px, 32vh, 320px);
+    min-height: 0;
+  }
+
+  .s4-leaflet-map {
+    height: 100%;
+    min-height: 0;
+  }
+}
+
+/* Wider NDVI panel, balanced CHIRPS panel */
+@media (min-width: 981px) {
+  .analysis-card .analysis-layout {
+    grid-template-columns:
+      minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 12px;
+  }
+}
+
+/* Larger scientific visualizations */
+.analysis-card .s4-analysis-visual {
+  height: clamp(410px, 52vh, 560px);
+  background: #ffffff;
+}
+
+.analysis-card .s4-analysis-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Reduce unnecessary internal margins */
+.analysis-card .map-panel,
+.analysis-card .indicator-panel {
+  padding: 10px;
+  gap: 8px;
+}
+
+/* Professional indicator colors */
+.analysis-card .green-value {
+  color: #267448;
+}
+
+.analysis-card .orange-value {
+  color: #98505a;
+}
+
+.analysis-card .risk-value {
+  color: #586773;
+}
+
+/* Compact indicator cards */
+.analysis-card .metric-card {
+  min-height: 82px;
+  padding: 10px 12px;
+}
+
+/* Responsive layout */
+@media (max-width: 680px) {
+  .analysis-card .s4-analysis-visual {
+    height: 340px;
+  }
+}
+
+/* =========================================
+   SPRINT 4 — FINAL CORRECTIONS
+   ========================================= */
+
+/* 1. Restore the original Mali map */
+@media (min-width: 1001px) {
+  .s4-map-card {
+    padding: 14px;
+    align-self: stretch;
+  }
+
+  .s4-map-canvas {
+    flex: 1 1 auto;
+    height: clamp(260px, 48vh, 440px);
+    min-height: 0;
+  }
+
+  .s4-leaflet-map {
+    height: 100%;
+    min-height: 0;
+  }
+}
+
+/* 2. Restore equal NDVI / CHIRPS panels */
+@media (min-width: 981px) {
+  .analysis-card .analysis-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* 3. Reduce visualization height */
+.analysis-card .s4-analysis-visual {
+  height: 310px;
+  padding: 12px 24px;
+  box-sizing: border-box;
+}
+
+/* Keep images undistorted */
+.analysis-card .s4-analysis-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Enlarge only the NDVI map horizontally */
+.analysis-card .map-panel .s4-analysis-img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+/* Sprint 4 — Neutral notes below scientific figures */
+
+.analysis-card .map-panel > .validation-note,
+.analysis-card .indicator-panel > .validation-note {
+  background: #f1f7f4;
+  border: 1px solid #d5e5dd;
+  border-radius: 10px;
+
+  color: #405a50;
+  font-size: 0.88rem;
+  font-weight: 400;
+  line-height: 1.5;
+
+  padding: 10px 14px;
+  margin: 0;
+  box-shadow: none;
+}
+
+/* Sprint 4 — Correct NDVI map proportions */
+
+.analysis-card .map-panel .s4-analysis-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
